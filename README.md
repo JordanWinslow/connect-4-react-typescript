@@ -1,1 +1,1 @@
-## Just practicing Typescript.
+## Connect 4 in React / Typescript
