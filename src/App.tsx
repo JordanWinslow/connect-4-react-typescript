@@ -1,10 +1,18 @@
 import React, { useState } from "react"
 
-const gridShape = Array.from({ length: 6 }, () =>
-  Array.from({ length: 7 }, () => 0)
-) // creates a 7 column by 6 row grid filled with 0s
-
+/*********************STYLING*********************/
 const style = {
+  playerIndicator: {
+    textAlign: "center",
+    fontSize: "3rem"
+  },
+  gridContainer: {
+    marginTop: "10vh",
+    width: "100vw",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
   grid: {
     backgroundColor: "blue",
     borderRadius: "10px",
@@ -25,12 +33,19 @@ const style = {
     justifyContent: "center",
     alignItems: "center"
   }
-} as any
+} as any // removes typescript error
 
+/*********************GRID INITIALIZATION*********************/
+const gridShape = Array.from({ length: 6 }, () =>
+  Array.from({ length: 7 }, () => 0)
+) // creates a 7 column by 6 row grid filled with 0s
+
+/*********************APP COMPONENT*********************/
 const App: React.FC = () => {
   const [player, setPlayer] = useState(1)
   const [grid] = useState(gridShape)
 
+  /*********************GAME FUNCTIONS*********************/
   const isColumnFull = (y: number) => {
     let count = 0
     grid.forEach((_, index) => {
@@ -73,70 +88,66 @@ const App: React.FC = () => {
       })
     } */
   }
+
   const gameWonBy = (winningPlayer: number) => {
     alert(
       `Congratulations Player ${winningPlayer}: YOU WIN!!! OMG SO EXCITING!!`
     )
   }
-
+  /*********************RETURN METHOD & RENDERING*********************/
   return (
-    <div
-      style={{
-        marginTop: "10vh",
-        width: "100vw",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center"
-      }}
-    >
-      <div style={{ ...style.grid }} id="GAME_BOARD">
-        {grid.map((row: Array<number>, x: number) => {
-          return row.map((col: number, y: number) => {
-            return (
-              <div
-                className="GAME_PIECE"
-                key={`${x}-${y}`}
-                style={{
-                  ...style.circle,
-                  backgroundColor:
-                    grid[x][y] === 0
-                      ? "white"
-                      : grid[x][y] === 1
-                      ? "yellow"
-                      : "red"
-                }}
-                onClick={() => {
-                  if (!isColumnFull(y)) {
-                    // findTop returns the x value for the top available game space
-                    const top = findTop(y)
-                    if (player === 1) {
-                      grid[top][y] = 1
-                      setPlayer(2)
-                    } else {
-                      grid[top][y] = 2
-                      setPlayer(1)
+    <>
+      <div style={{ ...style.playerIndicator }}>PLAYER {player}'s TURN</div>
+      <div style={{ ...style.gridContainer }}>
+        <div style={{ ...style.grid }} id="GAME_BOARD">
+          {grid.map((row: Array<number>, x: number) => {
+            return row.map((col: number, y: number) => {
+              return (
+                <div
+                  className="GAME_PIECE"
+                  key={`${x}-${y}`}
+                  style={{
+                    ...style.circle,
+                    backgroundColor:
+                      grid[x][y] === 0
+                        ? "white"
+                        : grid[x][y] === 1
+                        ? "yellow"
+                        : "red"
+                  }}
+                  onClick={() => {
+                    if (!isColumnFull(y)) {
+                      // findTop returns the x value for the top available game space
+                      const top = findTop(y)
+                      if (player === 1) {
+                        grid[top][y] = 1
+                        setPlayer(2)
+                      } else {
+                        grid[top][y] = 2
+                        setPlayer(1)
+                      }
+                      checkForWinner([top, y])
                     }
-                    checkForWinner([top, y])
+                  }}
+                >
+                  {
+                    <span
+                      id="GRID_INDEXES_DEBUGGER"
+                      style={{
+                        opacity:
+                          "0" /* set this to 1 to see the x/y index for each game piece on the screen*/
+                      }}
+                    >
+                      {x}, {y}
+                    </span>
                   }
-                }}
-              >
-                {
-                  <span
-                    id="GRID_INDEXES_DEBUGGER"
-                    style={{
-                      opacity:
-                        "0" /* set this to 1 to see the x/y index for each game piece*/
-                    }}
-                  >
-                    {x}, {y}
-                  </span>
-                }
-              </div>
-            )
-          })
-        })}
+                </div>
+              )
+            })
+          })}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
