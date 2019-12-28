@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 
 /*********************STYLING*********************/
 const style = {
@@ -33,46 +33,46 @@ const style = {
     justifyContent: "center",
     alignItems: "center"
   }
-} as any // removes typescript error
+} as any; // removes typescript error
 
 /*********************GRID INITIALIZATION*********************/
 const gridShape = Array.from({ length: 6 }, () =>
   Array.from({ length: 7 }, () => 0)
-) // creates a 7 column by 6 row grid filled with 0s
+); // creates a 7 column by 6 row grid filled with 0s
 
 /*********************APP COMPONENT*********************/
 const App: React.FC = () => {
-  const [player, setPlayer] = useState(1)
-  const [grid] = useState(gridShape)
+  const [player, setPlayer] = useState(1);
+  const [grid] = useState(gridShape);
 
   /*********************GAME FUNCTIONS*********************/
   const isColumnFull = (y: number) => {
-    let count = 0
+    let count = 0;
     grid.forEach((_, index) => {
-      const player = grid[index][y]
+      const player = grid[index][y];
       if (player === 1 || player === 2) {
-        count++
+        count++;
       }
-    })
-    return count === 6 // 6 is max height of column
-  }
+    });
+    return count === 6; // 6 is max height of column
+  };
 
   const findTop = (y: number) => {
-    let topOfStack = 0
+    let topOfStack = 0;
     grid.forEach((_, index) => {
       if (grid[index][y] === 0) {
-        topOfStack = index
-        return
+        topOfStack = index;
+        return;
       }
-    })
-    return topOfStack
-  }
+    });
+    return topOfStack;
+  };
 
   const checkForWinner = (lastPiecePlayed: Array<number>) => {
-    console.log(lastPiecePlayed)
-    console.log("Checking for winner...")
-    const [x, y] = lastPiecePlayed
-    let count = 0
+    console.log(lastPiecePlayed);
+    console.log("Checking for winner...");
+    const [x, y] = lastPiecePlayed;
+    let count = 0;
     /* I'm thinking, check the top of the stack where the last piece was placed and determine if there is 4 in a row extending from it
     { 
       grid.forEach((row, x) => {
@@ -87,19 +87,19 @@ const App: React.FC = () => {
         })
       })
     } */
-  }
+  };
 
   const gameWonBy = (winningPlayer: number) => {
     alert(
       `Congratulations Player ${winningPlayer}: YOU WIN!!! OMG SO EXCITING!!`
-    )
-  }
+    );
+  };
   /*********************RETURN METHOD & RENDERING*********************/
   return (
     <>
-      <div style={{ ...style.playerIndicator }}>PLAYER {player}'s TURN</div>
-      <div style={{ ...style.gridContainer }}>
-        <div style={{ ...style.grid }} id="GAME_BOARD">
+      <div style={style.playerIndicator}>PLAYER {player}'s TURN</div>
+      <div style={style.gridContainer}>
+        <div style={style.grid} id="GAME_BOARD">
           {grid.map((row: Array<number>, x: number) => {
             return row.map((col: number, y: number) => {
               return (
@@ -118,15 +118,15 @@ const App: React.FC = () => {
                   onClick={() => {
                     if (!isColumnFull(y)) {
                       // findTop returns the x value for the top available game space
-                      const top = findTop(y)
+                      const top = findTop(y);
                       if (player === 1) {
-                        grid[top][y] = 1
-                        setPlayer(2)
+                        grid[top][y] = 1;
+                        setPlayer(2);
                       } else {
-                        grid[top][y] = 2
-                        setPlayer(1)
+                        grid[top][y] = 2;
+                        setPlayer(1);
                       }
-                      checkForWinner([top, y])
+                      checkForWinner([top, y]);
                     }
                   }}
                 >
@@ -142,13 +142,13 @@ const App: React.FC = () => {
                     </span>
                   }
                 </div>
-              )
-            })
+              );
+            });
           })}
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
